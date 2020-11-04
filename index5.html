@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+
+	<title>캔바스에 그리기</title>
+
+	<style type="text/css">
+
+		canvas { width:400px; height:300px; border:1px solid black; }
+
+	</style>
+
+	<script type="text/javascript">
+
+		var ballArr = null;
+
+		var canvas = null;
+
+		var context = null;
+
+		
+
+		function Ball(x, y, radius, color) { // 생성자 함수
+
+			this.cx = x;
+
+			this.cy = y;
+
+			this.xSpeed = 1;
+
+			this.ySpeed = 1;
+
+			this.radius = radius;
+
+			this.color = color;
+
+		}
+
+		
+
+		Ball.prototype.draw = function() {
+
+		    context.beginPath();
+
+		    context.arc(this.cx, this.cy, this.radius, 0, 2 * Math.PI, false);
+
+		    context.fillStyle = this.color;
+
+		    context.fill();
+
+		    context.lineWidth = 1;
+
+		    context.strokeStyle = '#003300';
+
+		    context.stroke();
+
+		    context.closePath();
+
+		}
+
+		
+
+		function init() {
+
+		    canvas = document.getElementById('gameCanvas');
+
+		    context = canvas.getContext('2d');
+
+		    
+
+			var ball1 = new Ball(100, 50, 20, 'red');
+
+			var ball2 = new Ball(200, 100, 20,'blue');
+
+			
+
+			ballArr = Array();
+
+			ballArr.push(ball1);
+
+			ballArr.push(ball2);
+
+			
+
+			for(var i=0;i<ballArr.length;i++){
+
+				ballArr[i].draw();
+
+			}
+
+		}
+
+		
+
+		function start() {
+
+			for(var i=0;i<ballArr.length;i++){
+
+			ballArr[i].xSpeed = Math.floor((Math.random() * 10 +1)/2); 
+
+ // 0~5 사이의 임의의 속도
+
+			   if(Math.floor((Math.random() * 10 +1))%2==0) ballArr[i].xSpeed *= -1;                            // 왼쪽 방향
+
+				
+
+				ballArr[i].ySpeed = Math.floor((Math.random() * 10 +1)/2);
+
+				if(Math.floor((Math.random() * 10 +1))%2 ==0)ballArr[i].ySpeed *= -1;                                 // 윗쪽 방향
+
+			}
+
+			
+
+			setInterval(animate, 30);
+
+		}
+
+		
+
+		function animate() {
+
+			context.fillStyle = 'white';
+
+			context.fillRect(0,0,canvas.width, canvas.height);
+
+			
+
+			for(var i=0;i<ballArr.length;i++){
+
+				ballArr[i].cx += ballArr[i].xSpeed;
+
+				ballArr[i].cy += ballArr[i].ySpeed;
+
+				
+
+				if(ballArr[i].cx >= canvas.width-ballArr[i].radius) {
+
+					ballArr[i].xSpeed *= -1;
+
+					ballArr[i].cx = canvas.width-ballArr[i].radius;
+
+				}
+
+				if(ballArr[i].cy>= canvas.height-ballArr[i].radius){
+
+					ballArr[i].ySpeed *= -1;
+
+					ballArr[i].cy = canvas.height-ballArr[i].radius;
+
+				}
+
+				if(ballArr[i].cx <= ballArr[i].radius) {
+
+					ballArr[i].xSpeed *= -1;
+
+					ballArr[i].cx = ballArr[i].radius;
+
+				}
+
+				if(ballArr[i].cy <= ballArr[i].radius){
+
+					ballArr[i].ySpeed *= -1;
+
+					ballArr[i].cy = ballArr[i].radius;
+
+				}
+
+			}
+
+		    
+
+			for(var i=0;i<ballArr.length;i++){
+
+				ballArr[i].draw();
+
+			}
+
+		}
+
+		
+
+		window.addEventListener('load',init );
+
+	</script>
+
+</head>
+
+	<body>
+
+	<canvas id="gameCanvas" >
+
+	</canvas>
+
+	<button type="button" onclick="start();">시 작</button>
+
+	</body>
+
+</html>
+
+
+
+출처: https://ddo-o.tistory.com/83 [공순이의 블로그]
